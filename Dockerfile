@@ -4,7 +4,7 @@ MAINTAINER Menkov Maxim <mmenkov94@gmail.com>
 
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update
-RUN apt-get upgrade
+RUN apt-get upgrade -y
 
 RUN apt-get install -y openssh-server supervisor
 RUN apt-get update && apt-get dist-upgrade -y
