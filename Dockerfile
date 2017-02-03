@@ -2,8 +2,7 @@
 FROM nginx
 MAINTAINER Menkov Maxim <mmenkov94@gmail.com>
 
-RUN apt-key adv --recv-keys --keyserver.ubuntu.com 40976EAF437D05B5
-RUN apt-key adv --recv-keys --keyserver.ubuntu.com
+RUN apt-key adv --recv-keys --keyserver keyserver.ubuntu.com 40976EAF437D05B5
 RUN echo "deb http://archive.ubuntu.com/ubuntu precise main universe" > /etc/apt/sources.list
 RUN apt-get update
 
