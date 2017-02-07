@@ -8,7 +8,7 @@ RUN \
   echo 'root:password' | chpasswd && \
   sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
-COPY supervisord.conf /etc/supervisor/supervisord.conf
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 EXPOSE 22 80 443
 
 CMD ["/usr/bin/supervisord"]
