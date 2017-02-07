@@ -7,6 +7,6 @@ RUN \
   mkdir -p /var/log/supervisor
 
 COPY supervisord.conf /etc/supervisor/supervisord.conf
-EXPOSE 22 80 443
+EXPOSE 80 443
 
 CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
