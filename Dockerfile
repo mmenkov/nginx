@@ -1,31 +1,14 @@
-# Build an image of latest stable nginx
-FROM nginx
-MAINTAINER Menkov Maxim <mmenkov94@gmail.com>
+FROM ubuntu:14.04
+MAINTAINER mmenkov@digital-mind.ru
 
 RUN \
   apt-get update && \
-  apt-get install -y supervisor && \
-  rm -rf /var/lib/apt/lists/* && \
-  sed -i 's/^\(\[supervisord\]\)$/\1\nnodaemon=true/' /etc/supervisor/supervisord.conf
+  apt-get install -y openssh-server apache2 supervisor nginx && \
+  mkdir -p /var/lock/apache2 /var/run/apache2 /var/run/sshd /var/log/supervisor && \
+  echo 'root:password' | chpasswd && \
+  sed -i 's/PermitRootLogin without-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
-# Define mountable directories.
-VOLUME ["/etc/supervisor/conf.d"]
+COPY supervisord.conf /etc/supervisor/supervisord.conf
+EXPOSE 22 80 443
 
-# ------------------------------------------------------------------------------
-# Security changes
-# - Determine runlevel and services at startup [BOOT-5180]
-RUN update-rc.d supervisor defaults
-
-# - Check the output of apt-cache policy manually to determine why output is empty [KRNL-5788]
-RUN apt-get update | apt-get upgrade -y
-
-# - Install a PAM module for password strength testing like pam_cracklib or pam_passwdqc [AUTH-9262]
-RUN apt-get install libpam-cracklib -y
-RUN ln -s /lib/x86_64-linux-gnu/security/pam_cracklib.so /lib/security
-
-# Define working directory.
-WORKDIR /etc/supervisor/conf.d
-
-# ------------------------------------------------------------------------------
-# Start supervisor, define default command.
-CMD ["supervisord", "-c", "/etc/supervisor/supervisord.conf"]
+CMD ["/usr/bin/supervisord"]
